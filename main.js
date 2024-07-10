@@ -1,15 +1,13 @@
-
-
 getHolidays();
 
 function showAlert(message) {
     let alertMessage = document.getElementById("alert-message");
     alertMessage.textContent = message;
-    alertMessage.style.display = "block";
+    alertMessage.classList.add("show");
     setTimeout(function () {
-        alertMessage.style.display = "none";
+      alertMessage.classList.remove("show");
     }, 3000);
-}
+  }
 
 function getHolidays() {
     fetch("http://127.0.0.1:8000/getHolidays")
@@ -107,14 +105,14 @@ function getHolidays() {
                 ratingItem.textContent = `Įvertinimas: ${holiday.averageRating}`;
                 details.appendChild(ratingItem);
 
-                let photos = document.createElement("div");
-                photos.className = "photos";
-                holiday.photos.forEach(photoUrl => {
-                    let img = document.createElement("img");
-                    img.src = photoUrl;
-                    photos.appendChild(img);
-                });
-                holidayCard.appendChild(photos);
+                // let photos = document.createElement("div");
+                // photos.className = "photos";
+                // holiday.photos.forEach(photoUrl => {
+                //     let img = document.createElement("img");
+                //     img.src = photoUrl;
+                //     photos.appendChild(img);
+                // });
+                // holidayCard.appendChild(photos);
 
                 holidayCard.appendChild(details);
 
@@ -145,27 +143,27 @@ function getHoliday(id) {
             details.className = "details";
 
             let descriptionItem = document.createElement("li");
-            descriptionItem.textContent = `Aprašas: ${data.description}`;
+            descriptionItem.innerHTML = `<strong>Kodėl verta rinktis šią kelionę:</strong> ${data.description}`;
             details.appendChild(descriptionItem);
 
             let countryItem = document.createElement("li");
-            countryItem.textContent = `Šalis: ${data.country}`;
+            countryItem.innerHTML = `<strong>Šalis:</strong> ${data.country}`;
             details.appendChild(countryItem);
-
+            
             let cityItem = document.createElement("li");
-            cityItem.textContent = `Miestas: ${data.city}`;
+            cityItem.innerHTML = `<strong>Miestas:</strong> ${data.city}`;
             details.appendChild(cityItem);
-
+            
             let durationItem = document.createElement("li");
-            durationItem.textContent = `Trukmė: ${data.duration}`;
+            durationItem.innerHTML = `<strong>Trukmė:</strong> ${data.duration}`;
             details.appendChild(durationItem);
-
+            
             let seasonItem = document.createElement("li");
-            seasonItem.textContent = `Sezonas: ${data.season}`;
+            seasonItem.innerHTML = `<strong>Sezonas:</strong> ${data.season}`;
             details.appendChild(seasonItem);
-
+            
             let priceItem = document.createElement("li");
-            priceItem.textContent = `Kaina: ${data.price}`;
+            priceItem.innerHTML = `<strong>Kaina:</strong> ${data.price}`;
             details.appendChild(priceItem);
 
             let ratingItem = document.createElement("li");
@@ -240,7 +238,7 @@ function createHoliday(form) {
     })
         .then(response => {
             if (response.ok) {
-                showAlert("sukurtas");
+                showAlert("Įrašas sukurtas");
                 form.reset();
                 getHolidays();
             } else {
@@ -256,7 +254,7 @@ function createHoliday(form) {
 function updateHoliday(holidayId) {
     let form = document.getElementById("edit-form");
     let formData = {
-        id:holidayId
+        id: holidayId
     };
     for (let field of Array.from(form.elements)) {
         if (field.name) {
@@ -278,18 +276,18 @@ function updateHoliday(holidayId) {
             "Content-Type": "application/json"
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Holiday updated successfully!");
-            getHolidays();
-        } else {
-            alert("Error updating holiday: " + data.error);
-        }
-    })
-    .catch(error => {
-        console.error("Error updating holiday:", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert("Įrašas atnaujintas");
+                getHolidays();
+            } else {
+                alert("Error updating holiday: " + data.error);
+            }
+        })
+        .catch(error => {
+            console.error("Error updating holiday:", error);
+        });
 }
 
 function editHoliday(data) {
@@ -300,11 +298,19 @@ function editHoliday(data) {
     form.id = "edit-form";
     container.appendChild(form);
 
+    let titleLabel = document.createElement("label");
+    titleLabel.textContent = "Pavadinimas:";
+    form.appendChild(titleLabel);
+
     let titleInput = document.createElement("input");
     titleInput.type = "text";
     titleInput.name = "title";
     titleInput.value = data.title;
     form.appendChild(titleInput);
+
+    let descriptionLabel = document.createElement("label");
+    descriptionLabel.textContent = "Aprašymas:";
+    form.appendChild(descriptionLabel);
 
     let descriptionInput = document.createElement("input");
     descriptionInput.type = "text";
@@ -312,11 +318,19 @@ function editHoliday(data) {
     descriptionInput.value = data.description;
     form.appendChild(descriptionInput);
 
+    let dcountryLabel = document.createElement("label");
+    dcountryLabel.textContent = "Šalis:";
+    form.appendChild(dcountryLabel);
+
     let countryInput = document.createElement("input");
     countryInput.type = "text";
     countryInput.name = "country";
     countryInput.value = data.country;
     form.appendChild(countryInput);
+
+    let cityLabel = document.createElement("label");
+    cityLabel.textContent = "Miestas:";
+    form.appendChild(cityLabel);
 
     let cityInput = document.createElement("input");
     cityInput.type = "text";
@@ -324,11 +338,19 @@ function editHoliday(data) {
     cityInput.value = data.city;
     form.appendChild(cityInput);
 
+    let durationLabel = document.createElement("label");
+    durationLabel.textContent = "Trukmė:";
+    form.appendChild(durationLabel);
+
     let durationInput = document.createElement("input");
     durationInput.type = "text";
     durationInput.name = "duration";
     durationInput.value = data.duration;
     form.appendChild(durationInput);
+
+    let seasonLabel = document.createElement("label");
+    seasonLabel.textContent = "Sezonas:";
+    form.appendChild(seasonLabel);
 
     let seasonInput = document.createElement("input");
     seasonInput.type = "text";
@@ -336,11 +358,19 @@ function editHoliday(data) {
     seasonInput.value = data.season;
     form.appendChild(seasonInput);
 
+    let priceLabel = document.createElement("label");
+    priceLabel.textContent = "Kaina:";
+    form.appendChild(priceLabel);
+
     let priceInput = document.createElement("input");
     priceInput.type = "text";
     priceInput.name = "price";
     priceInput.value = data.price;
     form.appendChild(priceInput);
+
+    let photo1Label = document.createElement("label");
+    photo1Label.textContent = "Nuotraukos:";
+    form.appendChild(photo1Label);
 
     let photo1Input = document.createElement("input");
     photo1Input.type = "text";
@@ -355,11 +385,12 @@ function editHoliday(data) {
     form.appendChild(photo2Input);
 
     let submitButton = document.createElement("button");
+    submitButton.className = "save-holiday-button";
     submitButton.type = "submit";
     submitButton.textContent = "Išsaugoti";
     form.appendChild(submitButton);
 
-    form.onsubmit = function(event) {
+    form.onsubmit = function (event) {
         event.preventDefault();
         updateHoliday(data.id);
     };
@@ -373,9 +404,9 @@ function deletetHoliday(holidayId) {
         },
         body: JSON.stringify({ id: holidayId })
     })
-       .then(response => {
+        .then(response => {
             if (response.ok) {
-                showAlert("ištrintas");
+                showAlert("Įrašas ištrintas");
                 getHolidays();
             }
         })

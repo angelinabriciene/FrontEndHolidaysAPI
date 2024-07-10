@@ -2,17 +2,48 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.header {
+    display: center;
+    background-color: rgb(16, 231, 238);
+    font-style: italic;
+    color: azure;
+    font-size: large;
+    text-align: center;
+}
+
+#page-name {
+    background-color: black;
+    color: azure;
+    font-size: medium;
+}
+
+#advert {
+    margin-top: 50px;
+}
+
+#custom-holiday-advert {
+    margin-top: 20px;
+}
+
 .holiday-list {
     padding: 20px;
 }
 
 .holiday-card {
+    background-color: aquamarine;
+    width: 400px;
+    height: 300px;
+    display: inline-block;
+    overflow: hidden;
+    margin-top: 10px;
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .holiday-card:hover {
@@ -27,6 +58,8 @@ body {
 
 .details li {
     margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .photos {
@@ -34,8 +67,8 @@ body {
 }
 
 .photos img {
-    width: 100px;
-    height: 100px;
+    width: 400px;
+    height: 400px;
     margin: 10px;
     border-radius: 10px;
 }
@@ -48,17 +81,21 @@ body {
     margin-top: 0;
 }
 
-.back-button {
-    background-color: #4CAF50;
-    color: #fff;
+.create-button {
+    margin-top: 10px;
+    background-color: #10e746;
+    color: #000000;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    display: block;
+    margin: 10px auto;
+    text-align: center;
 }
 
-.create-button {
-    background-color: #bc10e7;
+.back-button {
+    background-color: #4CAF50;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -87,3 +124,36 @@ body {
 .back-button:hover {
     background-color: #3e8e41;
 }
+
+#edit-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#edit-form label {
+    display: block;
+    width: 100%;
+}
+
+.save-holiday-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#alert-message {
+    text-align: center;
+    color: #000000;
+    background-color: #df8218;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: none;
+  }
+  
+  #alert-message.show {
+    display: block;
+  }
