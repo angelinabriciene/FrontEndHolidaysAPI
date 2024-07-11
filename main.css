@@ -14,7 +14,7 @@ body {
 #page-name {
     background-color: black;
     color: azure;
-    font-size: 50px;
+    font-size: 40px;
 }
 
 #advert {
@@ -76,13 +76,17 @@ body {
     text-overflow: ellipsis;
 }
 
+.details li label {
+    font-weight: bold;
+  }
+
 .photos {
     margin-top: 10px;
 }
 
 .photos img {
-    width: 1300px;
-    height: 1000px;
+    width: 1000px;
+    height: 800px;
     margin: 10px;
     border-radius: 10px;
 }
@@ -219,16 +223,19 @@ body {
     cursor: pointer;
   }
 
-  .rating-stars {
-    display: inline-block;
-    font-size: 1.5em;
+  .half-star {
+    position: relative;
   }
   
-  .star {
-    cursor: pointer;
-    color: #ccc;
+  .half-star::before {
+    content: "★";
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
   }
-  
-  .star.filled {
-    color: #ffd700;
+
+  .bold{
+    font-weight: 900;
   }

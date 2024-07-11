@@ -5,14 +5,14 @@ function showAlert(message) {
     alertMessage.textContent = message;
     alertMessage.classList.add("show");
     setTimeout(function () {
-      alertMessage.classList.remove("show");
+        alertMessage.classList.remove("show");
     }, 3000);
-  }
+}
 
-  function getHolidays() {
+function getHolidays() {
     fetch("http://127.0.0.1:8000/getHolidays")
-       .then(response => response.json())
-       .then(data => {
+        .then(response => response.json())
+        .then(data => {
             const container = document.getElementById("container");
             container.innerHTML = "";
 
@@ -109,37 +109,61 @@ function createDetails(holiday) {
     const details = document.createElement("ul");
     details.className = "details";
 
-    const countryItem = createListItem(`Šalis: ${holiday.country}`);
+    const countryItem = createListItem(`Šalis : ${holiday.country}`);
     details.appendChild(countryItem);
 
-    const cityItem = createListItem(`Miestas: ${holiday.city}`);
+    const cityItem = createListItem(`Miestas : ${holiday.city}`);
     details.appendChild(cityItem);
 
-    const durationItem = createListItem(`Trukmė: ${holiday.duration}`);
+    const durationItem = createListItem(`Trukmė : ${holiday.duration}`);
     details.appendChild(durationItem);
 
-    const seasonItem = createListItem(`Sezonas: ${holiday.season}`);
+    const seasonItem = createListItem(`Sezonas : ${holiday.season}`);
     details.appendChild(seasonItem);
 
-    const priceItem = createListItem(`Kaina €: ${holiday.price}`);
+    const priceItem = createListItem(`Kaina € : ${holiday.price}`);
     details.appendChild(priceItem);
 
-    const ratingItem = createListItem(`Įvertinimas: ${holiday.averageRating}`);
-    details.appendChild(ratingItem);
+    const ratingItem = createListItem("", "", details, true);
+    createRatingStars(ratingItem, holiday.averageRating);
 
     return details;
 }
 
-function createListItem(text) {
-    const item = document.createElement("li");
-    item.textContent = text;
-    return item;
+function createListItem(label, text, parent, isRating = false) {
+    const listItem = document.createElement("li");
+
+    if (!label) {
+        listItem.classList.add("rating-item");
+    }
+
+    if (label) {
+        const labelSpan = document.createElement("span");
+        labelSpan.textContent = label;
+        listItem.appendChild(labelSpan);
+    }
+
+    if (text) {
+        const textSpan = document.createElement("span");
+        textSpan.textContent = text;
+        listItem.appendChild(textSpan);
+    }
+
+    if (parent) {
+        parent.appendChild(listItem);
+    }
+
+    if (isRating) {
+        return listItem;
+    }
+
+    return listItem;
 }
 
 function getHoliday(id) {
     fetch(`http://127.0.0.1:8000/getHoliday?id=${id}`)
-       .then(response => response.json())
-       .then(data => {
+        .then(response => response.json())
+        .then(data => {
             const container = document.getElementById("container");
             container.innerHTML = "";
 
@@ -151,6 +175,7 @@ function getHoliday(id) {
             createHolidayDetails(data, holidayInfo);
             createPhotos(data.photos, holidayInfo);
             createButtons(holidayInfo, data);
+            window.scrollTo(0, 0);
         });
 }
 
@@ -165,19 +190,40 @@ function createHolidayDetails(data, parent) {
     details.className = "details";
     parent.appendChild(details);
 
-    createDetailItem("Kodėl verta rinktis šią kelionę:", data.description, details);
-    createDetailItem("Šalis:", data.country, details);
-    createDetailItem("Miestas:", data.city, details);
-    createDetailItem("Trukmė:", data.duration, details);
-    createDetailItem("Sezonas:", data.season, details);
-    createDetailItem("Kaina €:", data.price, details);
-    createDetailItem("Įvertinimas:", data.averageRating, details);
+    createDetailItem("Kodėl verta rinktis šią kelionę:  ", data.description, details, true);
+    createDetailItem("Šalis:  ", data.country, details, true);
+    createDetailItem("Miestas:  ", data.city, details, true);
+    createDetailItem("Trukmė:  ", data.duration, details, true);
+    createDetailItem("Sezonas:  ", data.season, details, true);
+    createDetailItem("Kaina €:  ", data.price, details, true);
+    createDetailItem("Įvertinimas:  ", data.averageRating, details, true, true);
 }
 
-function createDetailItem(label, text, parent) {
-    const item = document.createElement("li");
-    item.innerHTML = `<strong>${label}</strong> ${text}`;
-    parent.appendChild(item);
+function createDetailItem(label, text, parent, bold = false, isRating = false) {
+    const listItem = document.createElement("li");
+
+    if (label) {
+        const labelSpan = document.createElement("span");
+        if (bold) {
+            labelSpan.classList.add("bold");
+        }
+        labelSpan.textContent = label;
+        listItem.appendChild(labelSpan);
+    }
+
+    if (text) {
+        if (isRating) {
+            createRatingStars(listItem, parseFloat(text));
+        } else {
+            const textSpan = document.createElement("span");
+            textSpan.textContent = text;
+            listItem.appendChild(textSpan);
+        }
+    }
+
+    parent.appendChild(listItem);
+
+    return listItem;
 }
 
 function createPhotos(photos, parent) {
@@ -433,3 +479,33 @@ function deletetHoliday(holidayId) {
         })
 }
 
+function createRating(holiday) {
+    const ratingItem = document.createElement("p");
+    ratingItem.className = "rating";
+
+    const ratingStars = createRatingStars(null, holiday.averageRating);
+    ratingItem.appendChild(ratingStars);
+
+    return ratingItem;
+}
+
+function createRatingStars(parent, rating) {
+    const ratingStars = document.createElement("span");
+    ratingStars.className = "rating-stars";
+
+    for (let i = 1; i <= 5; i++) {
+        const star = document.createElement("span");
+        star.className = "star";
+        if (i <= rating) {
+            star.textContent = "★";
+        } else if (i - 0.5 <= rating) {
+            star.textContent = "☆";
+            star.classList.add("half-star");
+        } else {
+            star.textContent = "☆";
+        }
+        ratingStars.appendChild(star);
+    }
+
+    parent.appendChild(ratingStars);
+}
