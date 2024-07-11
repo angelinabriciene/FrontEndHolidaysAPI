@@ -218,3 +218,17 @@ body {
     border-radius: 10px;
     cursor: pointer;
   }
+
+  .rating-stars {
+    display: inline-block;
+    font-size: 1.5em;
+  }
+  
+  .star {
+    cursor: pointer;
+    color: #ccc;
+  }
+  
+  .star.filled {
+    color: #ffd700;
+  }

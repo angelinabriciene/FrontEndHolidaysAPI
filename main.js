@@ -121,7 +121,7 @@ function createDetails(holiday) {
     const seasonItem = createListItem(`Sezonas: ${holiday.season}`);
     details.appendChild(seasonItem);
 
-    const priceItem = createListItem(`Kaina: ${holiday.price}`);
+    const priceItem = createListItem(`Kaina €: ${holiday.price}`);
     details.appendChild(priceItem);
 
     const ratingItem = createListItem(`Įvertinimas: ${holiday.averageRating}`);
@@ -135,17 +135,6 @@ function createListItem(text) {
     item.textContent = text;
     return item;
 }
-
-// function createPhotos(photos) {
-//     const photosDiv = document.createElement("div");
-//     photosDiv.className = "photos";
-//     photos.forEach(photoUrl => {
-//         const img = document.createElement("img");
-//         img.src = photoUrl;
-//         photosDiv.appendChild(img);
-//     });
-//     return photosDiv;
-// }
 
 function getHoliday(id) {
     fetch(`http://127.0.0.1:8000/getHoliday?id=${id}`)
@@ -181,7 +170,7 @@ function createHolidayDetails(data, parent) {
     createDetailItem("Miestas:", data.city, details);
     createDetailItem("Trukmė:", data.duration, details);
     createDetailItem("Sezonas:", data.season, details);
-    createDetailItem("Kaina:", data.price, details);
+    createDetailItem("Kaina €:", data.price, details);
     createDetailItem("Įvertinimas:", data.averageRating, details);
 }
 
@@ -381,7 +370,7 @@ function editHoliday(data) {
     form.appendChild(seasonInput);
 
     let priceLabel = document.createElement("label");
-    priceLabel.textContent = "Kaina:";
+    priceLabel.textContent = "Kaina €:";
     form.appendChild(priceLabel);
 
     let priceInput = document.createElement("input");
@@ -439,6 +428,8 @@ function deletetHoliday(holidayId) {
             if (response.ok) {
                 showAlert("Įrašas ištrintas");
                 getHolidays();
+                window.scrollTo(0, 0);
             }
         })
 }
+
