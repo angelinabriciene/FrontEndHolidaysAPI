@@ -14,7 +14,7 @@ body {
 #page-name {
     background-color: black;
     color: azure;
-    font-size: medium;
+    font-size: 50px;
 }
 
 #advert {
@@ -22,7 +22,8 @@ body {
 }
 
 #custom-holiday-advert {
-    margin-top: 20px;
+    margin-top: 30px;
+    height: 80px;
 }
 
 .holiday-list {
@@ -30,13 +31,14 @@ body {
 }
 
 .holiday-card {
-    background-color: aquamarine;
+    background-color: rgb(16, 231, 238);
     width: 400px;
     height: 300px;
     display: inline-block;
     overflow: hidden;
     margin-top: 10px;
     margin-bottom: 20px;
+    margin-left: 30px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -44,6 +46,18 @@ body {
     cursor: pointer;
     word-wrap: break-word;
     white-space: normal;
+    position: relative;
+}
+
+.holiday-card::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2L12 22 20 16 4 16 12 2Z'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .holiday-card:hover {
@@ -67,8 +81,8 @@ body {
 }
 
 .photos img {
-    width: 400px;
-    height: 400px;
+    width: 1300px;
+    height: 1000px;
     margin: 10px;
     border-radius: 10px;
 }
@@ -95,6 +109,7 @@ body {
 }
 
 .back-button {
+    margin-left: 20px;
     background-color: #4CAF50;
     color: #fff;
     padding: 10px 20px;
@@ -104,6 +119,7 @@ body {
 }
 
 .edit-button {
+    margin-left: 20px;
     background-color: #ebdc13;
     color: #fff;
     padding: 10px 20px;
@@ -113,6 +129,7 @@ body {
 }
 
 .delete-button {
+    margin-left: 20px;
     background-color: #dd0e1f;
     color: #fff;
     padding: 10px 20px;
@@ -156,4 +173,48 @@ body {
   
   #alert-message.show {
     display: block;
+  }
+
+  #holiday-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  #holiday-form label {
+    display: block;
+    width: 100%;
+  }
+
+  #holiday-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  #holiday-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  #holiday-form input[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+
+  .cancel-button {
+    background-color: #dd0e1f;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
   }

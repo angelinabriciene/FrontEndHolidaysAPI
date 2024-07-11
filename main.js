@@ -9,204 +9,225 @@ function showAlert(message) {
     }, 3000);
   }
 
-function getHolidays() {
+  function getHolidays() {
     fetch("http://127.0.0.1:8000/getHolidays")
-        .then(response => response.json())
-        .then(data => {
-            let container = document.getElementById("container");
+       .then(response => response.json())
+       .then(data => {
+            const container = document.getElementById("container");
             container.innerHTML = "";
 
-            let createButton = document.createElement("button");
-            createButton.id = "create-holiday-btn";
-            createButton.className = "create-button";
-            createButton.textContent = "Sukurti naują kelionių kryptį";
-            container.appendChild(createButton);
-
-            let holidayForm = document.createElement("form");
-            holidayForm.id = "holiday-form";
-            holidayForm.style.display = "none";
-            container.appendChild(holidayForm);
-
-            holidayForm.addEventListener("submit", function (event) {
-                event.preventDefault();
-                createHoliday(holidayForm);
-            });
-
-            let formFields = `
-              <label for="holiday-title">Pavadinimas</label>
-              <input type="text" id="title" name="title"><br><br>
-
-              <label for="holiday-country">Šalis</label>
-              <input type="text" id="country" name="country"><br><br>
-
-              <label for="holiday-city">Miestas</label>
-              <input type="text" id="city" name="city"><br><br>
-
-              <label for="holiday-duration">Trukmė</label>
-              <input type="text" id="duration" name="duration"><br><br>
-
-              <label for="holiday-season">Sezonas</label>
-              <input type="text" id="season" name="season"><br><br>
-
-              <label for="holiday-description">Aprašas</label>
-              <input type="text" id="description" name="description"><br><br>
-
-              <label for="holiday-price">Kaina</label>
-              <input type="text" id="price" name="price"><br><br>
-
-              <label for="holiday-photos">Nuotraukos</label>
-              <input type="text" id="photos" name="photo1"><br><br>
-              <input type="text" id="photos" name="photo2"><br><br>
-
-              <input type="submit" value="Išsaugoti">
-            `;
-            holidayForm.innerHTML = formFields;
-
-            document.getElementById("create-holiday-btn").addEventListener("click", function () {
-                document.getElementById("holiday-form").style.display = "block";
-            });
-
-            let holidayList = document.createElement("div");
-            holidayList.id = "holiday-list";
-            container.appendChild(holidayList);
-
-            data.forEach(holiday => {
-                let holidayCard = document.createElement("div");
-                holidayCard.className = "holiday-card";
-
-                let title = document.createElement("h2");
-                title.textContent = holiday.title;
-                holidayCard.appendChild(title);
-
-                let details = document.createElement("ul");
-                details.className = "details";
-
-                let countryItem = document.createElement("li");
-                countryItem.textContent = `Šalis: ${holiday.country}`;
-                details.appendChild(countryItem);
-
-                let cityItem = document.createElement("li");
-                cityItem.textContent = `Miestas: ${holiday.city}`;
-                details.appendChild(cityItem);
-
-                let durationItem = document.createElement("li");
-                durationItem.textContent = `Trukmė: ${holiday.duration}`;
-                details.appendChild(durationItem);
-
-                let seasonItem = document.createElement("li");
-                seasonItem.textContent = `Sezonas: ${holiday.season}`;
-                details.appendChild(seasonItem);
-
-                let priceItem = document.createElement("li");
-                priceItem.textContent = `Kaina: ${holiday.price}`;
-                details.appendChild(priceItem);
-
-                let ratingItem = document.createElement("li");
-                ratingItem.textContent = `Įvertinimas: ${holiday.averageRating}`;
-                details.appendChild(ratingItem);
-
-                // let photos = document.createElement("div");
-                // photos.className = "photos";
-                // holiday.photos.forEach(photoUrl => {
-                //     let img = document.createElement("img");
-                //     img.src = photoUrl;
-                //     photos.appendChild(img);
-                // });
-                // holidayCard.appendChild(photos);
-
-                holidayCard.appendChild(details);
-
-                holidayCard.onclick = function () {
-                    getHoliday(holiday.id);
-                };
-
-                holidayList.appendChild(holidayCard);
-            });
+            createButton(container);
+            createHolidayForm(container);
+            createHolidayList(container, data);
         });
 }
+
+function createButton(container) {
+    const createButton = document.createElement("button");
+    createButton.id = "create-holiday-btn";
+    createButton.className = "create-button";
+    createButton.textContent = "Sukurti naują kelionių kryptį";
+    container.appendChild(createButton);
+
+    createButton.addEventListener("click", () => {
+        document.getElementById("holiday-form").style.display = "block";
+    });
+}
+
+function createHolidayForm(container) {
+    const holidayForm = document.createElement("form");
+    holidayForm.id = "holiday-form";
+    holidayForm.style.display = "none";
+    container.appendChild(holidayForm);
+
+    holidayForm.addEventListener("submit", event => {
+        event.preventDefault();
+        createHoliday(holidayForm);
+    });
+
+    const formFields = `
+      <label for="holiday-title">Pavadinimas</label>
+      <input type="text" id="title" name="title"><br><br>
+
+      <label for="holiday-country">Šalis</label>
+      <input type="text" id="country" name="country"><br><br>
+
+      <label for="holiday-city">Miestas</label>
+      <input type="text" id="city" name="city"><br><br>
+
+      <label for="holiday-duration">Trukmė</label>
+      <input type="text" id="duration" name="duration"><br><br>
+
+      <label for="holiday-season">Sezonas</label>
+      <input type="text" id="season" name="season"><br><br>
+
+      <label for="holiday-description">Aprašas</label>
+      <input type="text" id="description" name="description"><br><br>
+
+      <label for="holiday-price">Kaina</label>
+      <input type="text" id="price" name="price"><br><br>
+
+      <label for="holiday-photos">Nuotraukos</label>
+      <input type="text" id="photos" name="photo1"><br><br>
+      <input type="text" id="photos" name="photo2"><br><br>
+
+      <input type="submit" value="Išsaugoti">
+    `;
+    holidayForm.innerHTML = formFields;
+}
+
+function createHolidayList(container, data) {
+    const holidayList = document.createElement("div");
+    holidayList.id = "holiday-list";
+    container.appendChild(holidayList);
+
+    data.forEach(holiday => {
+        const holidayCard = createHolidayCard(holiday);
+        holidayList.appendChild(holidayCard);
+    });
+}
+
+function createHolidayCard(holiday) {
+    const holidayCard = document.createElement("div");
+    holidayCard.className = "holiday-card";
+
+    const title = document.createElement("h2");
+    title.textContent = holiday.title;
+    holidayCard.appendChild(title);
+
+    const details = createDetails(holiday);
+    holidayCard.appendChild(details);
+
+    holidayCard.onclick = () => {
+        getHoliday(holiday.id);
+    };
+
+    return holidayCard;
+}
+
+function createDetails(holiday) {
+    const details = document.createElement("ul");
+    details.className = "details";
+
+    const countryItem = createListItem(`Šalis: ${holiday.country}`);
+    details.appendChild(countryItem);
+
+    const cityItem = createListItem(`Miestas: ${holiday.city}`);
+    details.appendChild(cityItem);
+
+    const durationItem = createListItem(`Trukmė: ${holiday.duration}`);
+    details.appendChild(durationItem);
+
+    const seasonItem = createListItem(`Sezonas: ${holiday.season}`);
+    details.appendChild(seasonItem);
+
+    const priceItem = createListItem(`Kaina: ${holiday.price}`);
+    details.appendChild(priceItem);
+
+    const ratingItem = createListItem(`Įvertinimas: ${holiday.averageRating}`);
+    details.appendChild(ratingItem);
+
+    return details;
+}
+
+function createListItem(text) {
+    const item = document.createElement("li");
+    item.textContent = text;
+    return item;
+}
+
+// function createPhotos(photos) {
+//     const photosDiv = document.createElement("div");
+//     photosDiv.className = "photos";
+//     photos.forEach(photoUrl => {
+//         const img = document.createElement("img");
+//         img.src = photoUrl;
+//         photosDiv.appendChild(img);
+//     });
+//     return photosDiv;
+// }
 
 function getHoliday(id) {
     fetch(`http://127.0.0.1:8000/getHoliday?id=${id}`)
-        .then(response => response.json())
-        .then(data => {
+       .then(response => response.json())
+       .then(data => {
+            const container = document.getElementById("container");
             container.innerHTML = "";
 
-            let holidayInfo = document.createElement("div");
+            const holidayInfo = document.createElement("div");
             holidayInfo.className = "holiday-info";
             container.appendChild(holidayInfo);
 
-            let title = document.createElement("h1");
-            title.textContent = data.title;
-            holidayInfo.appendChild(title);
-
-            let details = document.createElement("ul");
-            details.className = "details";
-
-            let descriptionItem = document.createElement("li");
-            descriptionItem.innerHTML = `<strong>Kodėl verta rinktis šią kelionę:</strong> ${data.description}`;
-            details.appendChild(descriptionItem);
-
-            let countryItem = document.createElement("li");
-            countryItem.innerHTML = `<strong>Šalis:</strong> ${data.country}`;
-            details.appendChild(countryItem);
-            
-            let cityItem = document.createElement("li");
-            cityItem.innerHTML = `<strong>Miestas:</strong> ${data.city}`;
-            details.appendChild(cityItem);
-            
-            let durationItem = document.createElement("li");
-            durationItem.innerHTML = `<strong>Trukmė:</strong> ${data.duration}`;
-            details.appendChild(durationItem);
-            
-            let seasonItem = document.createElement("li");
-            seasonItem.innerHTML = `<strong>Sezonas:</strong> ${data.season}`;
-            details.appendChild(seasonItem);
-            
-            let priceItem = document.createElement("li");
-            priceItem.innerHTML = `<strong>Kaina:</strong> ${data.price}`;
-            details.appendChild(priceItem);
-
-            let ratingItem = document.createElement("li");
-            ratingItem.textContent = `Įvertinimas: ${data.averageRating}`;
-            details.appendChild(ratingItem);
-
-            let photos = document.createElement("div");
-            photos.className = "photos";
-            data.photos.forEach(photoUrl => {
-                let img = document.createElement("img");
-                img.src = photoUrl;
-                photos.appendChild(img);
-            });
-            holidayInfo.appendChild(photos);
-
-            holidayInfo.appendChild(details);
-
-            let backButton = document.createElement("button");
-            backButton.className = "back-button";
-            backButton.textContent = "Grįžti į sąrašą";
-            backButton.onclick = function () {
-                getHolidays();
-            };
-            holidayInfo.appendChild(backButton);
-
-            let editButton = document.createElement("button");
-            editButton.className = "edit-button";
-            editButton.textContent = "Redaguoti įrašą";
-            editButton.onclick = function () {
-                editHoliday(data);
-            };
-            holidayInfo.appendChild(editButton);
-
-            let deleteButton = document.createElement("button");
-            deleteButton.className = "delete-button";
-            deleteButton.textContent = "Ištrinti įrašą";
-            deleteButton.onclick = function () {
-                deletetHoliday(data.id);
-            };
-            holidayInfo.appendChild(deleteButton);
+            createHolidayTitle(data.title, holidayInfo);
+            createHolidayDetails(data, holidayInfo);
+            createPhotos(data.photos, holidayInfo);
+            createButtons(holidayInfo, data);
         });
 }
 
+function createHolidayTitle(title, parent) {
+    const titleElement = document.createElement("h1");
+    titleElement.textContent = title;
+    parent.appendChild(titleElement);
+}
+
+function createHolidayDetails(data, parent) {
+    const details = document.createElement("ul");
+    details.className = "details";
+    parent.appendChild(details);
+
+    createDetailItem("Kodėl verta rinktis šią kelionę:", data.description, details);
+    createDetailItem("Šalis:", data.country, details);
+    createDetailItem("Miestas:", data.city, details);
+    createDetailItem("Trukmė:", data.duration, details);
+    createDetailItem("Sezonas:", data.season, details);
+    createDetailItem("Kaina:", data.price, details);
+    createDetailItem("Įvertinimas:", data.averageRating, details);
+}
+
+function createDetailItem(label, text, parent) {
+    const item = document.createElement("li");
+    item.innerHTML = `<strong>${label}</strong> ${text}`;
+    parent.appendChild(item);
+}
+
+function createPhotos(photos, parent) {
+    const photosDiv = document.createElement("div");
+    photosDiv.className = "photos";
+    parent.appendChild(photosDiv);
+
+    photos.forEach(photoUrl => {
+        const img = document.createElement("img");
+        img.src = photoUrl;
+        photosDiv.appendChild(img);
+    });
+}
+
+function createButtons(parent, data) {
+    const backButton = document.createElement("button");
+    backButton.className = "back-button";
+    backButton.textContent = "Grįžti į sąrašą";
+    backButton.onclick = function () {
+        getHolidays();
+    };
+    parent.appendChild(backButton);
+
+    const editButton = document.createElement("button");
+    editButton.className = "edit-button";
+    editButton.textContent = "Redaguoti įrašą";
+    editButton.onclick = function () {
+        editHoliday(data);
+    };
+    parent.appendChild(editButton);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete-button";
+    deleteButton.textContent = "Ištrinti įrašą";
+    deleteButton.onclick = function () {
+        deletetHoliday(data.id);
+    };
+    parent.appendChild(deleteButton);
+}
 
 function createHoliday(form) {
     if (!(form instanceof HTMLFormElement)) {
@@ -241,6 +262,7 @@ function createHoliday(form) {
                 showAlert("Įrašas sukurtas");
                 form.reset();
                 getHolidays();
+                window.scrollTo(0, 0);
             } else {
                 showAlert("Klaida: negalima sukurti įrašo");
             }
@@ -389,6 +411,15 @@ function editHoliday(data) {
     submitButton.type = "submit";
     submitButton.textContent = "Išsaugoti";
     form.appendChild(submitButton);
+
+    let cancelButton = document.createElement("button");
+    cancelButton.className = "cancel-button";
+    cancelButton.textContent = "Atšaukti";
+    cancelButton.onclick = function (event) {
+        event.preventDefault();
+        getHolidays();
+    };
+    form.appendChild(cancelButton);
 
     form.onsubmit = function (event) {
         event.preventDefault();
