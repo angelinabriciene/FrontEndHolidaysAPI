@@ -4,7 +4,7 @@ body {
 
 .header {
     display: center;
-    background-color: rgb(16, 231, 238);
+    background-color: rgb(114, 114, 114);
     font-style: italic;
     color: azure;
     font-size: large;
@@ -31,7 +31,7 @@ body {
 }
 
 .holiday-card {
-    background-color: rgb(16, 231, 238);
+    background-color: rgb(114, 114, 114);
     width: 400px;
     height: 300px;
     display: inline-block;
@@ -61,7 +61,9 @@ body {
 }
 
 .holiday-card:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgb(110, 67, 189);
+    border-color: #000000;
+    border-width: 1px;
 }
 
 .details {
@@ -78,15 +80,15 @@ body {
 
 .details li label {
     font-weight: bold;
-  }
+}
 
 .photos {
     margin-top: 10px;
 }
 
 .photos img {
-    width: 1000px;
-    height: 800px;
+    width: 800px;
+    height: 600px;
     margin: 10px;
     border-radius: 10px;
 }
@@ -101,8 +103,8 @@ body {
 
 .create-button {
     margin-top: 10px;
-    background-color: #10e746;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
@@ -112,9 +114,17 @@ body {
     text-align: center;
 }
 
+.create-button:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
+}
+
 .back-button {
+    font-weight: bold;
+    font-size: large;
     margin-left: 20px;
-    background-color: #4CAF50;
+    background-color: #333333;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -123,119 +133,208 @@ body {
 }
 
 .edit-button {
+    font-weight: bold;
+    font-size: large;
     margin-left: 20px;
-    background-color: #ebdc13;
+    background-color: #333333;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
 }
 
 .delete-button {
+    font-weight: bold;
+    font-size: large;
     margin-left: 20px;
-    background-color: #dd0e1f;
+    background-color: #333333;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
 }
 
 .back-button:hover {
-    background-color: #3e8e41;
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
 }
 
 #edit-form {
-    display: flex;
-    flex-wrap: wrap;
+    display: block;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    padding: 20px;
 }
 
 #edit-form label {
+    margin-top: 10px;
     display: block;
-    width: 100%;
+}
+
+#edit-form input[type="text"] {
+    background-color: #d9d8db;
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#edit-form [name="description"] {
+    width: 50%;
+    height: 90px;
+    background-color: #d9d8db;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .save-holiday-button {
-    background-color: #4CAF50;
+    background-color: #333333;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.save-holiday-button:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
 }
 
 #alert-message {
     text-align: center;
     color: #000000;
-    background-color: #df8218;
+    background-color: #cea576;
     border: 1px solid #ccc;
     padding: 10px;
     display: none;
-  }
-  
-  #alert-message.show {
-    display: block;
-  }
+}
 
-  #holiday-form {
-    display: flex;
-    flex-wrap: wrap;
+#alert-message.show {
+    display: block;
+}
+
+#holiday-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  #holiday-form label {
+#holiday-form label {
     display: block;
-    width: 100%;
-  }
+}
 
-  #holiday-form input[type="text"] {
-    width: 100%;
+#holiday-form input[type="text"] {
+    background-color: #d9d8db;
+    width: 50%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-  }
+}
 
-  #holiday-form input[type="submit"] {
-    background-color: #4CAF50;
+#holiday-form input:hover {
+    background-color: #ccc3c3;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+}
+
+#holiday-form [id="description"] {
+    width: 50%;
+    height: 90px;
+    background-color: #d9d8db;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#holiday-form [id="description"]:hover {
+    background-color: #ccc3c3;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+}
+
+#holiday-form input[type="submit"] {
+    background-color: #333333;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-  }
+}
 
-  #holiday-form input[type="submit"]:hover {
-    background-color: #3e8e41;
-  }
+#holiday-form input[type="submit"]:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
+}
 
-  .cancel-button {
-    background-color: #dd0e1f;
+.cancel-button {
+    margin-left: 20px;
+    background-color: #44292b;
     color: #fff;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-  }
+}
 
-  .half-star {
+.cancel-button:hover {
+    background-color: rgb(110, 67, 189);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.3);
+    border-width: 5px;
+}
+
+.half-star {
     position: relative;
-  }
-  
-  .half-star::before {
+}
+
+.half-star::before {
     content: "★";
     position: absolute;
     top: -3px;
     left: 0;
     width: 50%;
     overflow: hidden;
-  }
+}
 
-  .bold{
+.bold {
     font-weight: 900;
-  }
+}
+
+#logo {
+    color: rgb(110, 67, 189);
+    text-decoration: none;
+}
+
+.rating {
+    display: inline-block;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.star.filled {
+    color: rgb(110, 67, 189);
+}
+
+.star:hover {
+    color: rgb(115, 72, 197);
+}

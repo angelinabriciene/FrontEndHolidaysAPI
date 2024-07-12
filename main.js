@@ -62,7 +62,7 @@ function createHolidayForm(container) {
       <input type="text" id="season" name="season"><br><br>
 
       <label for="holiday-description">Aprašas</label>
-      <input type="text" id="description" name="description"><br><br>
+      <textarea type="text" id="description" name="description"></textarea>
 
       <label for="holiday-price">Kaina</label>
       <input type="text" id="price" name="price"><br><br>
@@ -99,7 +99,7 @@ function createHolidayCard(holiday) {
     holidayCard.appendChild(details);
 
     holidayCard.onclick = () => {
-        getHoliday(holiday.id);
+        getHoliday(holiday.id, holidayCard);
     };
 
     return holidayCard;
@@ -179,6 +179,28 @@ function getHoliday(id) {
         });
 }
 
+// function updateRating(data, stars) {
+//     fetch('http://127.0.0.1:8000/rateHoliday', {
+//         method: "POST",
+//         body: JSON.stringify({ id: data.id, rating: [stars] }),
+//         headers: {
+//             "Content-Type": "application/json"
+//         }
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             showAlert("Rating submitted successfully");
+//         } else {
+//             showAlert("Error submitting rating: " + data.error);
+//         }
+//     })
+//     .catch(error => {
+//         console.error("Error submitting rating:", error);
+//         showAlert("Error submitting rating");
+//     });
+// }
+
 function createHolidayTitle(title, parent) {
     const titleElement = document.createElement("h1");
     titleElement.textContent = title;
@@ -197,6 +219,20 @@ function createHolidayDetails(data, parent) {
     createDetailItem("Sezonas:  ", data.season, details, true);
     createDetailItem("Kaina €:  ", data.price, details, true);
     createDetailItem("Įvertinimas:  ", data.averageRating, details, true, true);
+
+    // const ratingContainer = document.createElement("div");
+    //         ratingContainer.className = "rating";
+    // holidayInfo.appendChild(ratingContainer);
+    // const stars = [];
+    // for (let i = 1; i <= 5; i++) {
+    //   const star = document.createElement("span");
+    //   star.className = "star";
+    //   star.id = `star-${i}`;
+    //   ratingContainer.appendChild(star);
+    //   stars.push(star);
+    // }
+    // updateRating(data, stars)
+
 }
 
 function createDetailItem(label, text, parent, bold = false, isRating = false) {
@@ -299,11 +335,13 @@ function createHoliday(form) {
                 getHolidays();
                 window.scrollTo(0, 0);
             } else {
+                window.scrollTo(0, 0);
                 showAlert("Klaida: negalima sukurti įrašo");
             }
         })
         .catch(error => {
             console.error("Error creating holiday:", error);
+            window.scrollTo(0, 0);
             showAlert("Klaida: negalima sukurti įrašo");
         });
 }
@@ -320,15 +358,17 @@ function updateHoliday(holidayId) {
                     formData["photos"] = [];
                 }
                 formData["photos"].push(field.value);
+            } else if (field.name == "rating") {
+                formData[field.name] = JSON.parse(field.value);
             } else {
                 formData[field.name] = field.value;
             }
         }
     }
 
-    fetch(`http://127.0.0.1:8000/updateHoliday?id=${holidayId}`, {
+    fetch('http://127.0.0.1:8000/updateHoliday', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, id: holidayId }),
         headers: {
             "Content-Type": "application/json"
         }
@@ -369,8 +409,7 @@ function editHoliday(data) {
     descriptionLabel.textContent = "Aprašymas:";
     form.appendChild(descriptionLabel);
 
-    let descriptionInput = document.createElement("input");
-    descriptionInput.type = "text";
+    let descriptionInput = document.createElement("textarea");
     descriptionInput.name = "description";
     descriptionInput.value = data.description;
     form.appendChild(descriptionInput);
@@ -441,6 +480,16 @@ function editHoliday(data) {
     photo2Input.value = data.photos[1];
     form.appendChild(photo2Input);
 
+    let ratingLabel = document.createElement("label");
+    ratingLabel.textContent = "";
+    form.appendChild(ratingLabel);
+
+    let ratingInput = document.createElement("input");
+    ratingInput.type = "hidden";
+    ratingInput.name = "rating";
+    ratingInput.value = JSON.stringify(data.rating);
+    form.appendChild(ratingInput);
+
     let submitButton = document.createElement("button");
     submitButton.className = "save-holiday-button";
     submitButton.type = "submit";
@@ -479,15 +528,15 @@ function deletetHoliday(holidayId) {
         })
 }
 
-function createRating(holiday) {
-    const ratingItem = document.createElement("p");
-    ratingItem.className = "rating";
+// function createRating(holiday) {
+//     const ratingItem = document.createElement("p");
+//     ratingItem.className = "rating";
 
-    const ratingStars = createRatingStars(null, holiday.averageRating);
-    ratingItem.appendChild(ratingStars);
+//     const ratingStars = createRatingStars(null, holiday.averageRating);
+//     ratingItem.appendChild(ratingStars);
 
-    return ratingItem;
-}
+//     return ratingItem;
+// }
 
 function createRatingStars(parent, rating) {
     const ratingStars = document.createElement("span");
